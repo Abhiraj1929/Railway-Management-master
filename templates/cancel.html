@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancel Booking - Railway Management System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .cancel-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+            max-width: 500px;
+            margin: 48px auto 0 auto;
+            padding: 36px 32px 32px 32px;
+        }
+        .cancel-card h1 {
+            font-size: 2.1em;
+            color: #1976d2;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        .cancel-form label {
+            font-weight: 600;
+            color: #222;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .cancel-form input[type="text"] {
+            margin-top: 6px;
+            padding: 12px;
+            border: 1.5px solid #b0bec5;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 1.08em;
+            background: #f8fafc;
+            transition: border 0.2s;
+        }
+        .cancel-form input[type="text"]:focus {
+            border: 1.5px solid #1976d2;
+            outline: none;
+        }
+        .cancel-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #e53935 0%, #ef5350 100%);
+            color: #fff;
+            border: none;
+            padding: 16px 0;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+        }
+        .cancel-btn:hover {
+            background: linear-gradient(90deg, #d32f2f 0%, #e53935 100%);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+        .message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+        .booking-details {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #cfd8dc;
+            border-radius: 8px;
+            background-color: #f4f6f8;
+        }
+        .booking-details p {
+            margin-bottom: 8px;
+            color: #37474f;
+            font-size: 1em;
+        }
+        .booking-details p strong {
+            color: #1a237e;
+            margin-right: 5px;
+        }
+        .confirmation-form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cancel-card">
+        <h1>Cancel Booking</h1>
+
+        {% if message %}
+            <div class="message {{ message[0] }}">{{ message[1] }}</div>
+        {% endif %}
+
+        {% if booking_details %}
+            <div class="booking-details">
+                <h2>Confirm Cancellation</h2>
+                <p>Please confirm the details of the booking you wish to cancel:</p>
+                <p><strong>Booking ID:</strong> {{ booking_details.Booking_ID }}</p>
+                <p><strong>Passenger Name:</strong> {{ booking_details.Passenger_Name }}</p>
+                <p><strong>Train Number:</strong> {{ booking_details.Train_No }}</p>
+                <p><strong>Class:</strong> {{ booking_details.Class }}</p>
+                <p><strong>Date of Booking:</strong> {{ booking_details.Date_Of_Booking }}</p>
+
+                <form method="post" class="confirmation-form">
+                    <input type="hidden" name="booking_id" value="{{ booking_details.Booking_ID }}">
+                    <input type="hidden" name="confirm_cancel" value="yes">
+                    <button type="submit" class="cancel-btn">Confirm and Cancel Booking</button>
+                </form>
+            </div>
+        {% else %}
+            <p>Enter your Booking ID to view details and proceed with cancellation.</p>
+            <form method="post" class="cancel-form">
+                <label for="booking_id">Booking ID
+                    <input type="text" name="booking_id" id="booking_id" maxlength="10" required>
+                </label>
+                <button type="submit" class="fares-btn">Find Booking</button>
+            </form>
+        {% endif %}
+
+        <a href="/" class="back-link">&larr; Back to Home</a>
+    </div>
+</body>
+</html> 

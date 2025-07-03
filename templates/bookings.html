@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show My Bookings - Railway Management System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .bookings-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+            max-width: 600px;
+            margin: 48px auto 0 auto;
+            padding: 36px 32px 32px 32px;
+        }
+        .bookings-card h1 {
+            font-size: 2.1em;
+            color: #1976d2;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        .bookings-form label {
+            font-weight: 600;
+            color: #222;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .bookings-form input {
+            margin-top: 6px;
+            padding: 12px;
+            border: 1.5px solid #b0bec5;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 1.08em;
+            background: #f8fafc;
+            transition: border 0.2s;
+        }
+        .bookings-form input:focus {
+            border: 1.5px solid #1976d2;
+            outline: none;
+        }
+        .bookings-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+            color: #fff;
+            border: none;
+            padding: 16px 0;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+        }
+        .bookings-btn:hover {
+            background: linear-gradient(90deg, #1565c0 0%, #388e3c 100%);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+        }
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+        .booking-table th, .booking-table td {
+            border: 1px solid #b0bec5;
+            padding: 10px 8px;
+            text-align: left;
+        }
+        .booking-table th {
+            background: #e3f0ff;
+            color: #1976d2;
+        }
+        .booking-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        .no-bookings {
+            color: #c62828;
+            margin-top: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="bookings-card">
+        <h1>Show My Bookings</h1>
+        <form method="get" class="bookings-form">
+            <label>Mobile Number
+                <input type="text" name="mobile" maxlength="10" pattern="\d{10}" required value="{{ mobile|default('') }}">
+            </label>
+            <button type="submit" class="bookings-btn">Show Bookings</button>
+        </form>
+        {% if bookings is defined %}
+            {% if bookings %}
+                <table class="booking-table">
+                    <tr>
+                        <th>Train No</th>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Adhaar</th>
+                        <th>Date</th>
+                        <th>Booking ID</th>
+                        <th>Class</th>
+                    </tr>
+                    {% for b in bookings %}
+                    <tr>
+                        <td>{{ b[0] }}</td>
+                        <td>{{ b[1] }}</td>
+                        <td>{{ b[2] }}</td>
+                        <td>{{ b[3] }}</td>
+                        <td>{{ b[4] }}</td>
+                        <td>{{ b[5] }}</td>
+                        <td>{{ b[6] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <div class="no-bookings">No bookings found for this mobile number.</div>
+            {% endif %}
+        {% endif %}
+        <a href="/" class="back-link">&larr; Back to Home</a>
+    </div>
+</body>
+</html> 

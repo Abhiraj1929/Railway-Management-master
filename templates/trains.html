@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Trains - Railway Management System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Add specific styles for the trains page if needed, e.g., form layout */
+        /* These styles are now in style.css or handled by other classes */
+        /*
+        .trains-card { ... }
+        .trains-card h1 { ... }
+        .trains-form { ... }
+        .trains-form label { ... }
+        .trains-form input, .trains-form select { ... }
+        .trains-form input:focus, .trains-form select:focus { ... }
+        .trains-btn { ... }
+        .trains-btn:hover { ... }
+        .back-link { ... }
+        .autocomplete-suggestions { ... }
+        .autocomplete-item { ... }
+        .autocomplete-item:hover { ... }
+        */
+    </style>
+</head>
+<body>
+    <div class="fares-card">
+        <h1>Available Trains</h1>
+        <form method="get" class="fares-form" id="trains-form">
+            <label for="from_station">From (City Name)
+                <input type="text" name="from_station" id="from_station" maxlength="30" value="{{ from_station|default('') }}">
+                 <div id="from_station_suggestions" class="autocomplete-suggestions"></div>
+            </label>
+            <label for="to_station">To (City Name)
+                <input type="text" name="to_station" id="to_station" maxlength="30" value="{{ to_station|default('') }}">
+                 <div id="to_station_suggestions" class="autocomplete-suggestions"></div>
+            </label>
+             <label for="travel_date">Travel Date
+                <input type="date" name="travel_date" id="travel_date" value="{{ travel_date|default('') }}">
+            </label>
+             <label for="class">Class
+                <select name="class" id="class">
+                    <option value="">Any Class</option>
+                    <option value="SL" {% if travel_class == 'SL' %}selected{% endif %}>Sleeper (SL)</option>
+                    <option value="3A" {% if travel_class == '3A' %}selected{% endif %}>AC 3 Tier (3A)</option>
+                    <option value="2A" {% if travel_class == '2A' %}selected{% endif %}>AC 2 Tier (2A)</option>
+                    <option value="1A" {% if travel_class == '1A' %}selected{% endif %}>AC 1 Tier (1A)</option>
+                </select>
+            </label>
+            <button type="submit" class="fares-btn">Search Trains</button>
+        </form>
+
+        {% if results is defined %}
+            {% if results %}
+                <h2 style="margin-top: 30px; color: #1976d2;">Search Results</h2>
+                <div class="table-container">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>Train No.</th>
+                            <th>Train Name</th>
+                            <th>Route</th>
+                            <th>Departure</th>
+                            <th>Arrival</th>
+                            <th>Duration</th>
+                            <th>Fares & Availability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{ r.train_no }}</td>
+                            <td>{{ r.train_name }}</td>
+                            <td>{{ r.from }} &rarr; {{ r.to }}</td>
+                            <td>{{ r.departure }}</td>
+                            <td>{{ r.arrival }}</td>
+                            <td>{{ r.duration }}</td>
+                            <td>
+                                {% for class_code, fare_info in r.fares.items() %}
+                                    {% if travel_class == '' or travel_class == class_code %}
+                                        <b>{{ class_code }}</b>: ₹{{ fare_info.price }} ({{ fare_info.availability }})<br>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <!-- Pagination Controls -->
+                <div class="pagination" style="text-align: center; margin-top: 20px;">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('trains', from_station=from_station, to_station=to_station, travel_date=travel_date, travel_class=travel_class, page=page - 1) }}" class="pagination-link">Previous</a>
+                    {% endif %}
+                    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('trains', from_station=from_station, to_station=to_station, travel_date=travel_date, travel_class=travel_class, page=page + 1) }}" class="pagination-link">Next</a>
+                    {% endif %}
+                </div>
+            {% elif from_station_input or to_station_input %}
+                 <div class="no-bookings">No trains found for the selected criteria.</div>
+            {% else %}
+                 <div class="no-bookings">Enter origin and destination to search for trains.</div>
+            {% endif %}
+        {% endif %}
+        <a href="/" class="back-link">&larr; Back to Home</a>
+    </div>
+
+     <script>
+        function setupAutocomplete(inputId, suggestionsId) {
+            const input = document.getElementById(inputId);
+            const suggestionsContainer = document.getElementById(suggestionsId);
+
+            input.addEventListener('input', debounce(function() {
+                const query = input.value;
+                if (query.length < 2) {
+                    suggestionsContainer.innerHTML = '';
+                    return;
+                }
+                fetch(`/suggest_cities?query=${query}`)
+                    .then(response => response.json())
+                    .then(suggestions => {
+                        suggestionsContainer.innerHTML = '';
+                        suggestions.forEach(suggestion => {
+                            const div = document.createElement('div');
+                            div.textContent = suggestion;
+                            div.classList.add('autocomplete-item');
+                            div.addEventListener('click', function() {
+                                input.value = suggestion;
+                                suggestionsContainer.innerHTML = '';
+                            });
+                            suggestionsContainer.appendChild(div);
+                        });
+                    });
+            }, 300)); // Debounce to limit API calls
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!suggestionsContainer.contains(event.target) && event.target !== input) {
+                    suggestionsContainer.innerHTML = '';
+                }
+            });
+        }
+
+        // Simple debounce function (can be reused from fares.html)
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        setupAutocomplete('from_station', 'from_station_suggestions');
+        setupAutocomplete('to_station', 'to_station_suggestions');
+
+        // Optional: Prevent form submission on enter keypress in autocomplete fields
+         document.getElementById('trains-form').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'from_station' || activeElement.id === 'to_station') {
+                    e.preventDefault();
+                }
+            }
+        });
+
+    </script>
+</body>
+</html> 

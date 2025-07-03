@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Fares - Railway Management System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Specific styles for fares.html */
+        /* These styles are now in style.css */
+        /*
+        .fares-card { ... }
+        .fares-card h1 { ... }
+        .fares-form label { ... }
+        .fares-form input { ... }
+        .fares-form input:focus { ... }
+        .fares-btn { ... }
+        .fares-btn:hover { ... }
+        .back-link { ... }
+        */
+         .no-bookings {
+            color: #c62828;
+            margin-top: 18px;
+            text-align: center;
+        }
+
+        /* Styles for the dark table inspired by the image */
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 8px; /* Add some border radius to the table container */
+            overflow: hidden; /* Hide overflowing content for rounded corners */
+        }
+        .booking-table th {
+            background-color: #343a40; /* Dark header background */
+            color: #f8f9fa; /* Light header text */
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .booking-table td {
+            background-color: #454d55; /* Darker row background */
+            color: #dee2e6; /* Lighter row text */
+            padding: 10px 15px;
+            text-align: left;
+        }
+        .booking-table tbody tr:nth-child(odd) td {
+            background-color: #4f575e; /* Slightly different background for odd rows */
+        }
+        .booking-table tr:hover td {
+            background-color: #5a6268; /* Highlight on hover */
+        }
+        .booking-table th, .booking-table td {
+            border: none; /* Remove default borders */
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="fares-card">
+        <h1>Check Fares</h1>
+        <form method="post" class="fares-form" id="fares-form">
+            <label for="from_station">From (Station Name)
+                <input type="text" name="from_station" id="from_station" maxlength="30" required value="{{ from_station|default('') }}">
+                <div id="from_station_suggestions" class="autocomplete-suggestions"></div>
+            </label>
+            <label for="to_station">To (Station Name)
+                <input type="text" name="to_station" id="to_station" maxlength="30" required value="{{ to_station|default('') }}">
+                <div id="to_station_suggestions" class="autocomplete-suggestions"></div>
+            </label>
+            <button type="submit" class="fares-btn">Check Fares</button>
+        </form>
+        <a href="/" class="back-link">&larr; Back to Home</a>
+        {% if results is defined %}
+            {% if results %}
+                <h2 style="margin-top: 30px; color: #1976d2;">Sample Fares</h2>
+                <div class="table-container">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Distance (km)</th>
+                            <th>Sleeper (₹)</th>
+                            <th>AC-3 (₹)</th>
+                            <th>AC-2 (₹)</th>
+                            <th>AC-1 (₹)</th>
+                            <th>Journey Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{ r.from }} &rarr; {{ r.to }}</td>
+                            <td>~{{ r.distance }} km</td>
+                            <td>₹{{ r.sleeper }}</td>
+                            <td>₹{{ r.ac3 }}</td>
+                            <td>₹{{ r.ac2 }}</td>
+                            <td>₹{{ r.ac1 }}</td>
+                            <td>{{ r.journey_time }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <!-- Pagination Controls -->
+                <div class="pagination" style="text-align: center; margin-top: 20px;">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('fares', from_station=from_station, to_station=to_station, page=page - 1) }}" class="pagination-link">Previous</a>
+                    {% endif %}
+                    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('fares', from_station=from_station, to_station=to_station, page=page + 1) }}" class="pagination-link">Next</a>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="no-bookings">No fares found for the selected cities.</div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <script>
+        function setupAutocomplete(inputId, suggestionsId) {
+            const input = document.getElementById(inputId);
+            const suggestionsContainer = document.getElementById(suggestionsId);
+
+            input.addEventListener('input', debounce(function() {
+                const query = input.value;
+                if (query.length < 2) {
+                    suggestionsContainer.innerHTML = '';
+                    return;
+                }
+                fetch(`/suggest_cities?query=${query}`)
+                    .then(response => response.json())
+                    .then(suggestions => {
+                        suggestionsContainer.innerHTML = '';
+                        suggestions.forEach(suggestion => {
+                            const div = document.createElement('div');
+                            div.textContent = suggestion;
+                            div.classList.add('autocomplete-item');
+                            div.addEventListener('click', function() {
+                                input.value = suggestion;
+                                suggestionsContainer.innerHTML = '';
+                            });
+                            suggestionsContainer.appendChild(div);
+                        });
+                    });
+            }, 300)); // Debounce to limit API calls
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!suggestionsContainer.contains(event.target) && event.target !== input) {
+                    suggestionsContainer.innerHTML = '';
+                }
+            });
+        }
+
+        // Simple debounce function
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        setupAutocomplete('from_station', 'from_station_suggestions');
+        setupAutocomplete('to_station', 'to_station_suggestions');
+
+        // Prevent form submission on enter keypress in autocomplete fields
+        document.getElementById('fares-form').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'from_station' || activeElement.id === 'to_station') {
+                    e.preventDefault();
+                }
+            }
+        });
+
+    </script>
+</body>
+</html> 

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Railway Management System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .payment-box {
+            background: #f3f7fa;
+            border: 2px solid #1976d2;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 60px auto 0 auto;
+            padding: 36px 28px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10);
+        }
+        .payment-box h2 {
+            color: #1976d2;
+            margin-bottom: 18px;
+        }
+        .payment-details {
+            text-align: left;
+            margin: 0 auto 18px auto;
+            display: inline-block;
+        }
+        .pay-btn {
+            background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+        }
+        .pay-btn:hover {
+            background: linear-gradient(90deg, #1565c0 0%, #388e3c 100%);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+        }
+        .error {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-box">
+        <h2>Payment</h2>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <div class="payment-details">
+            <p><strong>Name:</strong> {{ booking.name }}</p>
+            <p><strong>Train Number:</strong> {{ booking.train_no }}</p>
+            <p><strong>Class:</strong> {{ booking.ticket_class }}</p>
+            <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+            <p><strong>Date:</strong> {{ booking.date }}</p>
+        </div>
+        <form method="post" class="form" style="margin-top:24px;">
+            <label>Card Number
+                <input type="text" name="card_number" maxlength="16" pattern="\d{16}" placeholder="1234 5678 9012 3456" required>
+            </label>
+            <label>Name on Card
+                <input type="text" name="card_name" maxlength="30" placeholder="Full Name" required>
+            </label>
+            <div style="display:flex; gap:16px;">
+                <label style="flex:1;">Expiry
+                    <input type="text" name="expiry" maxlength="5" pattern="\d{2}/\d{2}" placeholder="MM/YY" required>
+                </label>
+                <label style="flex:1;">CVV
+                    <input type="password" name="cvv" maxlength="3" pattern="\d{3}" placeholder="123" required>
+                </label>
+            </div>
+            <button type="submit" class="pay-btn">Pay Now</button>
+        </form>
+        <a href="/" class="back-link">&larr; Cancel and Back to Home</a>
+    </div>
+</body>
+</html> 

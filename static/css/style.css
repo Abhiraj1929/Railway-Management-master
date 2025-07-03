@@ -1,0 +1,314 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+.form label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-weight: 500;
+    color: #2d3e50;
+}
+.form input, .form select {
+    margin-top: 6px;
+    padding: 10px;
+    border: 1px solid #b0bec5;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1em;
+    background: #f8fafc;
+    transition: border 0.2s;
+}
+.form input:focus, .form select:focus {
+    border: 1.5px solid #1976d2;
+    outline: none;
+}
+button[type="submit"] {
+    background: #43a047;
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+button[type="submit"]:hover {
+    background: #388e3c;
+}
+.back-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #1976d2;
+    text-decoration: none;
+    font-size: 1em;
+    transition: color 0.2s;
+}
+.back-link:hover {
+    color: #0d47a1;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(120deg, #e3f0ff 0%, #fafcff 100%);
+    margin: 0;
+    padding: 0;
+}
+.main-header {
+    background: #1976d2;
+    color: #fff;
+    padding: 32px 0 18px 0;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08);
+}
+.main-header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    letter-spacing: 1px;
+}
+.subtitle {
+    font-size: 1.2em;
+    margin-top: 8px;
+    color: #e3f0ff;
+}
+.hero {
+    background: #fff;
+    margin: 32px auto 0 auto;
+    max-width: 500px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10);
+    padding: 36px 28px 28px 28px;
+    text-align: center;
+}
+.hero h2 {
+    margin: 0 0 10px 0;
+    color: #1976d2;
+    font-size: 2em;
+}
+.hero-btn {
+    display: inline-block;
+    margin-top: 18px;
+    background: #43a047;
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(67, 160, 71, 0.10);
+}
+.hero-btn:hover {
+    background: #388e3c;
+}
+.nav-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    margin: 40px auto 0 auto;
+    max-width: 800px;
+}
+.card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08);
+    padding: 32px 36px;
+    min-width: 220px;
+    text-align: center;
+    font-size: 1.15em;
+    font-weight: 500;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.card a {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+.card:hover {
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18);
+}
+
+.train-image-container {
+    margin-top: 48px;
+    text-align: center;
+}
+
+.train-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* Styles for Autocomplete Suggestions */
+.autocomplete-suggestions {
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 100;
+    background: #fff;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    top: 100%;
+    left: 0;
+}
+
+.autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover {
+    background-color: #e3f0ff;
+}
+
+/* Styles for Pagination */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: 1px solid #1976d2;
+    border-radius: 5px;
+    color: #1976d2;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pagination-link:hover {
+    background: #1976d2;
+    color: #fff;
+}
+
+.page-info {
+    font-size: 1em;
+    color: #555;
+    margin: 0 10px;
+}
+
+.no-bookings {
+    color: #c62828;
+    margin-top: 18px;
+    text-align: center;
+}
+
+/* Styles for the dark table inspired by the image - REVISED for a cleaner, light look */
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Softer shadow */
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff; /* White background for the table */
+}
+.booking-table th {
+    background-color: #f8f9fa; /* Light grey header background */
+    color: #343a40; /* Dark text */
+    padding: 12px 15px; /* Slightly increased padding */
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95em;
+    border-bottom: 1px solid #dee2e6; /* Subtle border below header */
+}
+.booking-table td {
+    background-color: #fff; /* White background for cells */
+    color: #212529; /* Darker text for readability */
+    padding: 8px 15px; /* Adjusted padding to reduce vertical space */
+    text-align: left;
+    font-size: 0.95em;
+    border-bottom: 1px solid #dee2e6; /* Subtle border between rows */
+}
+.booking-table tbody tr:last-child td {
+    border-bottom: none; /* No border for the last row */
+}
+.booking-table tbody tr:hover td {
+    background-color: #e9ecef; /* Very light highlight on hover */
+}
+.booking-table th, .booking-table td {
+    /* border: none; /* Remove default borders - already handled by specific borders */
+}
+
+/* Styles for the Fares page card */
+.fares-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+    max-width: 500px;
+    margin: 48px auto 0 auto;
+    padding: 36px 32px 32px 32px;
+}
+.fares-card h1 {
+    font-size: 2.1em;
+    color: #1976d2;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.fares-form label {
+    font-weight: 600;
+    color: #222;
+    display: block;
+    margin-bottom: 8px;
+    position: relative;
+}
+.fares-form input {
+    margin-top: 4px;
+    padding: 10px;
+    border: 1.5px solid #b0bec5;
+    border-radius: 6px;
+    width: 100%;
+    font-size: 1em;
+    background: #f8fafc;
+    transition: border 0.2s;
+    box-sizing: border-box;
+}
+.fares-form input:focus {
+    border: 1.5px solid #1976d2;
+    outline: none;
+}
+.fares-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 0;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.2s;
+}
+.fares-btn:hover {
+    background: linear-gradient(90deg, #1565c0 0%, #388e3c 100%);
+}
+
+.fares-card h2 {
+    margin-top: 24px;
+    color: #1976d2;
+    font-size: 1.2em;
+}
+
+/* Container for tables to handle horizontal overflow */
+.table-container {
+    overflow-x: auto; /* Add horizontal scrolling if needed */
+    margin-top: 20px; /* Add some space above the table */
+} 

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Ticket - Railway Management System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .booking-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+            max-width: 600px;
+            margin: 48px auto 0 auto;
+            padding: 36px 32px 32px 32px;
+        }
+        .booking-card h1 {
+            font-size: 2.1em;
+            color: #1976d2;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        .booking-row {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        .booking-row label {
+            flex: 1;
+            font-weight: 600;
+            color: #222;
+        }
+        .booking-row input, .booking-row select {
+            margin-top: 6px;
+            padding: 12px;
+            border: 1.5px solid #b0bec5;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 1.08em;
+            background: #f8fafc;
+            transition: border 0.2s;
+        }
+        .booking-row input:focus, .booking-row select:focus {
+            border: 1.5px solid #1976d2;
+            outline: none;
+        }
+        .booking-form-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+            color: #fff;
+            border: none;
+            padding: 16px 0;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+        }
+        .booking-form-btn:hover {
+            background: linear-gradient(90deg, #1565c0 0%, #388e3c 100%);
+        }
+        .booking-suggestion {
+            font-size: 0.98em;
+            color: #888;
+            margin-top: 2px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+        }
+        @media (max-width: 700px) {
+            .booking-card { padding: 18px 6vw; }
+            .booking-row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-card">
+        <h1>Book a Train Ticket</h1>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <form method="post">
+            <div class="booking-row">
+                <label>From (Station Code)
+                    <input type="text" name="from_station" maxlength="10" placeholder="e.g. YPR" required autocomplete="off">
+                    <div class="booking-suggestion">e.g. YPR (Bangalore), NDLS (New Delhi)</div>
+                </label>
+                <label>To (Station Code)
+                    <input type="text" name="to_station" maxlength="10" placeholder="e.g. GKP" required autocomplete="off">
+                    <div class="booking-suggestion">e.g. GKP (Gorakhpur), BCT (Mumbai)</div>
+                </label>
+            </div>
+            <div class="booking-row">
+                <label>Travel Date
+                    <input type="date" name="travel_date" required>
+                </label>
+                <label>Class
+                    <select name="class" required>
+                        <option value="Sleeper">Sleeper</option>
+                        <option value="AC-1">AC-1</option>
+                        <option value="AC-2">AC-2</option>
+                        <option value="AC-3">AC-3</option>
+                    </select>
+                </label>
+            </div>
+            <div class="booking-row">
+                <label>Train Number
+                    <input type="number" name="train_no" placeholder="e.g. 1235" required autocomplete="off">
+                    <div class="booking-suggestion">e.g. 1235 (Rajdhani Express)</div>
+                </label>
+            </div>
+            <div class="booking-row">
+                <label>Your Name
+                    <input type="text" name="name" maxlength="30" required>
+                </label>
+                <label>Mobile Number
+                    <input type="text" name="mobile" maxlength="10" pattern="\d{10}" required>
+                </label>
+                <label>Adhaar Number
+                    <input type="text" name="adhaar" maxlength="12" pattern="\d{12}" required>
+                </label>
+            </div>
+            <button type="submit" class="booking-form-btn">Book &amp; Continue to Payment</button>
+        </form>
+        <a href="/" class="back-link">&larr; Back to Home</a>
+    </div>
+</body>
+</html> 
